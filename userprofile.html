@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>profile</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link rel="stylesheet" href="homepage.css">
+</head>
+<body>
+
+<div class="navbar">
+  <a href="homepage.html"><i class="fa fa-home"></i>Home</a>
+  <a href="6month.html"><i class="fa fa-calendar"></i>6-Month Courses</a>
+  <a href="6week.html"><i class="fa fa-clock"></i>6-Week Courses</a>
+  <a href="Quote.html"><i class="fa fa-calculator"></i>Fees</a>
+  <a href="contact.html"><i class="fa fa-envelope"></i>Contact</a>
+  <a href="login.html"><i class="fa fa-user"></i>Login</a>
+  <a href="signUp.html"><i class="fa fa-user"></i>signUp</a>
+  <a href="userprofile.html"><i class="fa fa-user"></i>profile</a>
+</div>
+
+<div class="glass">
+  <h2 id="greeting">Welcome</h2>
+  <p>Here are your saved courses:</p>
+  <div id="savedList"></div>
+  <br>
+  <button id="logoutBtn">Log out</button>
+</div>
+<footer>
+  <div class="social-links">
+    <a href="https://www.facebook.com/share/1D8UUVruFP/?mibextid=wwXIfr" target="_blank"><i class="fab fa-facebook-f"></i></a>
+    <a href="https://www.instagram.com/empowering__the_nation?igsh=MXNiNTZnZjNwZWtwMg%3D%3D&utm_source=qr" target="_blank"><i class="fab fa-instagram"></i></a>
+    <a href="https://wa.me/0677136061" target="_blank"><i class="fab fa-whatsapp"></i></a>
+  </div>
+</footer>
+
+<script>
+  function getCourseUrl(courseName) {
+    const key = (courseName || '').toLowerCase().trim();
+    const map = {
+      'child minding': 'Childminding.html',
+      'cooking': 'Cooking.html',
+      'garden maintenance': 'gardenmaintenace.html',
+      'sewing': 'sewing.html',
+      'first aid': '6monthscoursefirstaid.html',
+      'landscaping': 'landscaping.html',
+      'life skills': 'Lifeskills.html'
+    };
+    return map[key] || null;
+  }
+
+  function requireAuth() {
+    const username = localStorage.getItem('currentUser');
+    if(!username) {
+      alert('Please login first.');
+      window.location.href = 'login.html';
+      return null;
+    }
+    return username;
+  }
+
+  function loadProfile(username) {
+    const profileKey = `profile:${username}`;
+    const profile = JSON.parse(localStorage.getItem(profileKey) || '{"username":"","savedCourses":[]}');
+    return { profile, profileKey };
+  }
+
+  function render() {
+    const username = requireAuth();
+    if(!username) return;
+    const { profile } = loadProfile(username);
+    document.getElementById('greeting').textContent = `Welcome, ${username}`;
+    const container = document.getElementById('savedList');
+    container.innerHTML = '';
+    if(!profile.savedCourses || profile.savedCourses.length === 0) {
+      container.textContent = 'No courses saved yet.';
+      return;
+    }
+    profile.savedCourses.forEach((c, idx) => {
+      const row = document.createElement('div');
+      row.className = 'course';
+      row.innerHTML = `<span>${c.name} - R${Number(c.price).toFixed(2)}</span>`;
+      const actions = document.createElement('div');
+      actions.className = 'actions';
+      const openBtn = document.createElement('button');
+      openBtn.textContent = 'Open course';
+      openBtn.onclick = () => {
+        const url = getCourseUrl(c.name);
+        if(url) {
+          window.location.href = url;
+        } else {
+          alert('Course page not found for: ' + c.name);
+        }
+      };
+      const removeBtn = document.createElement('button');
+      removeBtn.textContent = 'Remove';
+      removeBtn.onclick = () => removeCourse(idx);
+      actions.appendChild(openBtn);
+      actions.appendChild(removeBtn);
+      row.appendChild(actions);
+      container.appendChild(row);
+    });
+  }
+
+  function removeCourse(index) {
+    const username = localStorage.getItem('currentUser');
+    const { profile, profileKey } = loadProfile(username);
+    profile.savedCourses.splice(index, 1);
+    localStorage.setItem(profileKey, JSON.stringify(profile));
+    render();
+  }
+
+  document.getElementById('logoutBtn').addEventListener('click', function(){
+    localStorage.removeItem('currentUser');
+    window.location.href = 'homepage.html';
+  });
+
+  render();
+</script>
+
+
+
+</body>
+</html>
+
+

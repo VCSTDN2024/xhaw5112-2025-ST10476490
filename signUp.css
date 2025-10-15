@@ -1,0 +1,24 @@
+
+body { margin:0; font-family: Arial, sans-serif; background-image: url('background.JPG');  color: white;}
+.navbar {display:flex;justify-content:space-around;padding:10px;backdrop-filter: blur(10px);background: rgba(255, 255, 255, 0.15);}
+.navbar a{color:white;text-decoration:none;text-align:center;font-size:14px;}
+.navbar a i{display:block;font-size:20px;margin-bottom:4px;}
+.glass {max-width:400px;margin:100px auto;padding:20px;border-radius:15px;background:rgba(255,255,255,0.1);backdrop-filter: blur(10px);border:1px solid rgba(255,255,255,0.3);}
+input{width:100%;padding:8px;margin-top:10px;border:none;border-radius:5px;}
+button{margin-top:10px;padding:10px;width:100%;border:none;border-radius:5px;background:rgba(255,255,255,0.3);color:white;font-weight:bold;}
+.social-links {
+  display: flex;
+  justify-content: center; /* centers icons horizontally */
+  gap: 20px;               /* space between icons */
+}
+
+.social-links a {
+  font-size: 24px;
+  color: white;            /* icon color */
+  text-decoration: none;
+  transition: color 0.3s;
+}
+
+.social-links a:hover {
+  color: #007bff;          /* hover effect */
+}
