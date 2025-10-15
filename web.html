@@ -1,0 +1,408 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Nation Skill Navigator — Courses</title>
+  <meta name="description" content="Browse skill-building courses by category, level, and format." />
+  <style>
+    :root{
+      --bg: #0b1020;
+      --panel: #0f1730;
+      --muted: #a8b3cf;
+      --text: #e6ebff;
+      --brand: #6ea8fe;
+      --brand-2:#7bdfa3;
+      --ring: rgba(110,168,254,.45);
+      --card: #121b3a;
+      --chip: #1a2450;
+      --chip-brd: #263162;
+      --shadow: 0 10px 25px rgba(0,0,0,.35);
+      --radius: 14px;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif;
+      background: radial-gradient(1200px 800px at 10% -10%, #1b2550 0%, transparent 60%) no-repeat,
+                  radial-gradient(800px 800px at 110% -20%, #10333a 0%, transparent 60%) no-repeat,
+                  var(--bg);
+      color:var(--text);
+      line-height:1.6;
+    }
+
+    /* Header */
+    .site-header{
+      position:sticky; top:0; z-index:50;
+      backdrop-filter: saturate(1.2) blur(10px);
+      background: linear-gradient(to bottom, rgba(11,16,32,.85), rgba(11,16,32,.45));
+      border-bottom: 1px solid #1c2446;
+    }
+    .wrap{max-width:1100px; margin-inline:auto; padding: clamp(14px, 2vw, 20px);}
+    .brand{
+      display:flex; gap:.75rem; align-items:center; text-decoration:none; color:var(--text);
+      font-weight:700; letter-spacing:.3px;
+    }
+    .brand-badge{
+      width:34px; height:34px; border-radius:9px; display:grid; place-items:center;
+      background: conic-gradient(from 180deg at 50% 50%, var(--brand), var(--brand-2), #b68bff, var(--brand));
+      box-shadow: inset 0 0 0 2px rgba(255,255,255,.15), var(--shadow);
+      font-size:0; /* purely decorative */
+    }
+    .header-row{display:flex; align-items:center; justify-content:space-between; gap:1rem}
+    .nav{display:flex; gap:.8rem; flex-wrap:wrap}
+    .nav a{
+      color:var(--muted); text-decoration:none; font-weight:600; padding:.4rem .7rem; border-radius:10px;
+      border:1px solid transparent;
+    }
+    .nav a[aria-current="page"], .nav a:hover{ color:var(--text); border-color:#263162; background:#0d1430; }
+
+    /* Page intro */
+    .intro{
+      display:grid; gap:1rem; padding-block: clamp(18px, 2vw, 28px);
+    }
+    .intro h1{
+      margin:0; font-size: clamp(1.2rem, 1.2rem + 1vw, 1.9rem);
+      letter-spacing:.2px;
+    }
+    .intro p{ margin:0; color:var(--muted) }
+
+    /* Filters/Search */
+    .filters{
+      display:grid; gap:12px; grid-template-columns: 1fr; 
+      background: linear-gradient(180deg, #0f1730, #0c1530);
+      border:1px solid #1c2446; border-radius: var(--radius);
+      padding:12px;
+      box-shadow: var(--shadow);
+    }
+    @media (min-width: 720px){
+      .filters{ grid-template-columns: 1fr auto; align-items: center; }
+    }
+    .search{
+      display:flex; gap:10px; align-items:center;
+      background:#0a1330; border:1px solid #1a2450; border-radius:12px; padding:10px 12px;
+    }
+    .search input{
+      flex:1; background:transparent; border:0; outline:none; color:var(--text); font-size:15px;
+    }
+    .search svg{flex:0 0 auto}
+    .chips{ display:flex; gap:8px; flex-wrap:wrap }
+    .chip{
+      padding:.45rem .65rem; border-radius:999px; border:1px solid var(--chip-brd);
+      background: var(--chip); color:var(--muted); font-weight:600; font-size:.9rem;
+      cursor:default; user-select:none;
+    }
+
+    /* Cards grid */
+    .grid{
+      display:grid;
+      gap:16px;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      margin-top:16px;
+    }
+    .card{
+      background:linear-gradient(180deg, #121b3a, #0e1736);
+      border:1px solid #1f2a57; border-radius: var(--radius);
+      overflow:hidden; display:flex; flex-direction:column;
+      box-shadow: var(--shadow);
+      transition: transform .15s ease, box-shadow .15s ease, border-color .15s ease;
+    }
+    .card:hover{ transform: translateY(-2px); border-color:#2b3a7a; box-shadow: 0 12px 30px rgba(0,0,0,.45); }
+    .thumb{
+      aspect-ratio: 16/9; width:100%;
+      background:
+        radial-gradient(60% 80% at 70% 40%, rgba(110,168,254,.35), transparent 50%),
+        radial-gradient(70% 90% at 20% 10%, rgba(123,223,163,.25), transparent 55%),
+        linear-gradient(135deg, #1d2a66, #15235b 55%, #1a2f6e);
+      border-bottom:1px solid #1f2a57;
+      position:relative;
+    }
+    .badge{
+      position:absolute; top:10px; left:10px;
+      background:rgba(0,0,0,.35); border:1px solid #2c3a7a; color:#e8eeff;
+      font-size:.75rem; padding:.25rem .5rem; border-radius:999px; backdrop-filter: blur(6px);
+    }
+    .content{ padding:14px 14px 12px 14px; display:grid; gap:8px }
+    .title{ font-weight:800; margin:0; font-size:1.05rem; letter-spacing:.2px }
+    .meta{ display:flex; gap:10px; flex-wrap:wrap; color:var(--muted); font-size:.9rem }
+    .meta span{ display:inline-flex; gap:6px; align-items:center; }
+    .tags{ display:flex; gap:6px; flex-wrap:wrap }
+    .tag{
+      font-size:.75rem; font-weight:700; letter-spacing:.2px;
+      padding:.25rem .5rem; border-radius:6px; background:#0b143b; color:#c9d6ff; border:1px solid #22306a;
+    }
+    .cta{
+      margin-top:auto; display:flex; gap:8px; padding:0 14px 14px 14px;
+    }
+    .button, .button-secondary{
+      display:inline-flex; align-items:center; justify-content:center; gap:.5rem;
+      text-decoration:none; font-weight:800; letter-spacing:.2px; border-radius:10px;
+      padding:.6rem .8rem; font-size:.95rem; white-space:nowrap;
+      transition: transform .12s ease, background .12s ease, border-color .12s ease;
+    }
+    .button{
+      background:linear-gradient(180deg, #2a69ff, #1f56df); color:white; border:1px solid #3f79ff;
+    }
+    .button:hover{ transform: translateY(-1px); }
+    .button-secondary{
+      background:#0c1534; border:1px solid #203064; color:#e5ebff;
+    }
+    /* Footer */
+    footer{
+      margin-top:36px; border-top:1px solid #1c2446;
+      color:var(--muted);
+    }
+    .small{ font-size:.9rem }
+    /* Visually hidden utility */
+    .sr-only{
+      position:absolute !important; width:1px; height:1px; padding:0; margin:-1px;
+      overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0;
+    }
+
+    /* Simple focus styles */
+    a:focus, button:focus, input:focus{ outline: 2px solid var(--ring); outline-offset: 2px; }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header class="site-header" role="banner">
+    <div class="wrap header-row">
+      <a href="#" class="brand">
+        <span aria-hidden="true" class="brand-badge"></span>
+        <span>Nation Skill Navigator</span>
+      </a>
+      <nav class="nav" aria-label="Primary">
+        <a href="#" aria-current="page">Courses</a>
+        <a href="#">Paths</a>
+        <a href="#">About</a>
+        <a href="#">Support</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Main -->
+  <main class="wrap" id="main">
+    <section class="intro" aria-labelledby="page-title">
+      <h1 id="page-title">Explore Courses</h1>
+      <p>Build job-ready skills with concise, practical lessons. Filter by level, category, and format.</p>
+
+      <!-- Filters / Search -->
+      <div class="filters" role="region" aria-label="Search and filters">
+        <label class="search" for="q">
+          <!-- magnifier icon -->
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"/>
+            <path d="M20 20L17 17" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+          <input id="q" name="q" type="search" placeholder="Search courses (e.g., Excel, Welding, CV)" aria-label="Search courses" />
+        </label>
+
+        <div class="chips" role="list" aria-label="Quick filters">
+          <span class="chip" role="listitem">Beginner</span>
+          <span class="chip" role="listitem">Intermediate</span>
+          <span class="chip" role="listitem">Advanced</span>
+          <span class="chip" role="listitem">Free</span>
+          <span class="chip" role="listitem">Certification</span>
+          <span class="chip" role="listitem">Self-paced</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Courses grid -->
+    <section aria-labelledby="courses-heading">
+      <h2 class="sr-only" id="courses-heading">Courses</h2>
+      <div class="grid">
+        <!-- Card 1 -->
+        <article class="card">
+          <div class="thumb" role="img" aria-label="Data analysis abstract cover">
+            <span class="badge">Beginner</span>
+          </div>
+          <div class="content">
+            <h3 class="title">Excel Essentials for Work</h3>
+            <p class="small" style="margin:0">Master spreadsheets: formulas, tables, charts, and time-saving tips.</p>
+            <div class="meta">
+              <span title="Duration">⏱️ 6h</span>
+              <span title="Format">🎧 Self-paced</span>
+              <span title="Certificate">🎓 Certificate</span>
+            </div>
+            <div class="tags">
+              <span class="tag">Excel</span><span class="tag">Data</span><span class="tag">Admin</span>
+            </div>
+          </div>
+          <div class="cta">
+            <a class="button" href="#" aria-label="Start Excel Essentials for Work">Start</a>
+            <a class="button-secondary" href="#" aria-label="View details for Excel Essentials for Work">Details</a>
+          </div>
+        </article>
+
+        <!-- Card 2 -->
+        <article class="card">
+          <div class="thumb" role="img" aria-label="Tools and Google Docs">
+            <span class="badge">Beginner</span>
+          </div>
+          <div class="content">
+            <h3 class="title">Google Docs & CV Writing</h3>
+            <p class="small" style="margin:0">Write a professional CV and cover letter using free tools.</p>
+            <div class="meta">
+              <span>⏱️ 3h</span><span>🎧 Self-paced</span><span>🆓 Free</span>
+            </div>
+            <div class="tags">
+              <span class="tag">CV</span><span class="tag">Writing</span><span class="tag">Career</span>
+            </div>
+          </div>
+          <div class="cta">
+            <a class="button" href="#">Start</a>
+            <a class="button-secondary" href="#">Details</a>
+          </div>
+        </article>
+
+        <!-- Card 3 -->
+        <article class="card">
+          <div class="thumb" role="img" aria-label="Welding sparks">
+            <span class="badge">Intermediate</span>
+          </div>
+          <div class="content">
+            <h3 class="title">Intro to MIG Welding</h3>
+            <p class="small" style="margin:0">Safety, setup, and practice joints to get production-ready.</p>
+            <div class="meta">
+              <span>⏱️ 8h</span><span>👨‍🏭 Hands-on</span><span>🎓 Certificate</span>
+            </div>
+            <div class="tags">
+              <span class="tag">Welding</span><span class="tag">Fabrication</span>
+            </div>
+          </div>
+          <div class="cta">
+            <a class="button" href="#">Enroll</a>
+            <a class="button-secondary" href="#">Details</a>
+          </div>
+        </article>
+
+        <!-- Card 4 -->
+        <article class="card">
+          <div class="thumb" role="img" aria-label="Laptop with code">
+            <span class="badge">Beginner</span>
+          </div>
+          <div class="content">
+            <h3 class="title">Web Basics: HTML & CSS</h3>
+            <p class="small" style="margin:0">Build beautiful, responsive pages from scratch.</p>
+            <div class="meta">
+              <span>⏱️ 5h</span><span>🎧 Self-paced</span><span>🆓 Free</span>
+            </div>
+            <div class="tags">
+              <span class="tag">HTML</span><span class="tag">CSS</span><span class="tag">Frontend</span>
+            </div>
+          </div>
+          <div class="cta">
+            <a class="button" href="#">Start</a>
+            <a class="button-secondary" href="#">Details</a>
+          </div>
+        </article>
+
+        <!-- Card 5 -->
+        <article class="card">
+          <div class="thumb" role="img" aria-label="Finance dashboard">
+            <span class="badge">Intermediate</span>
+          </div>
+          <div class="content">
+            <h3 class="title">Power BI for Dashboards</h3>
+            <p class="small" style="margin:0">Turn raw data into interactive insights with DAX basics.</p>
+            <div class="meta">
+              <span>⏱️ 7h</span><span>🎧 Self-paced</span><span>🎓 Certificate</span>
+            </div>
+            <div class="tags">
+              <span class="tag">Power BI</span><span class="tag">Analytics</span>
+            </div>
+          </div>
+          <div class="cta">
+            <a class="button" href="#">Enroll</a>
+            <a class="button-secondary" href="#">Details</a>
+          </div>
+        </article>
+
+        <!-- Card 6 -->
+        <article class="card">
+          <div class="thumb" role="img" aria-label="Customer support headset">
+            <span class="badge">Beginner</span>
+          </div>
+          <div class="content">
+            <h3 class="title">Customer Support Fundamentals</h3>
+            <p class="small" style="margin:0">Ticketing, tone, and troubleshooting for first-line roles.</p>
+            <div class="meta">
+              <span>⏱️ 4h</span><span>🎧 Self-paced</span><span>🆓 Free</span>
+            </div>
+            <div class="tags">
+              <span class="tag">Support</span><span class="tag">Communication</span>
+            </div>
+          </div>
+          <div class="cta">
+            <a class="button" href="#">Start</a>
+            <a class="button-secondary" href="#">Details</a>
+          </div>
+        </article>
+
+        <!-- Card 7 -->
+        <article class="card">
+          <div class="thumb" role="img" aria-label="Restaurant service">
+            <span class="badge">Beginner</span>
+          </div>
+          <div class="content">
+            <h3 class="title">Hospitality: Service & POS</h3>
+            <p class="small" style="margin:0">Service flow, upselling, and common POS actions.</p>
+            <div class="meta">
+              <span>⏱️ 3h</span><span>🏷️ Job-ready</span><span>🆓 Free</span>
+            </div>
+            <div class="tags">
+              <span class="tag">Hospitality</span><span class="tag">Retail</span>
+            </div>
+          </div>
+          <div class="cta">
+            <a class="button" href="#">Start</a>
+            <a class="button-secondary" href="#">Details</a>
+          </div>
+        </article>
+
+        <!-- Card 8 -->
+        <article class="card">
+          <div class="thumb" role="img" aria-label="Smartphone with social apps">
+            <span class="badge">Advanced</span>
+          </div>
+          <div class="content">
+            <h3 class="title">Digital Marketing Sprint</h3>
+            <p class="small" style="margin:0">SEO, paid ads, and analytics with a capstone project.</p>
+            <div class="meta">
+              <span>⏱️ 10h</span><span>🧭 Guided</span><span>🎓 Certificate</span>
+            </div>
+            <div class="tags">
+              <span class="tag">SEO</span><span class="tag">Ads</span><span class="tag">Analytics</span>
+            </div>
+          </div>
+          <div class="cta">
+            <a class="button" href="#">Enroll</a>
+            <a class="button-secondary" href="#">Details</a>
+          </div>
+        </article>
+
+      </div>
+    </section>
+  </main>
+
+  <footer class="wrap" role="contentinfo">
+    <p class="small">© <span id="y">2025</span> Nation Skill Navigator. All rights reserved.</p>
+    <div class="social-links" style="margin-top:10px">
+      <a href="https://www.facebook.com/share/1D8UUVruFP/?mibextid=wwXIfr" target="_blank" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+      <a href="https://www.instagram.com/empowering__the_nation?igsh=MXNiNTZnZjNwZWtwMg%3D%3D&utm_source=qr" target="_blank" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+      <a href="https://wa.me/0677136061" target="_blank" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+    </div>
+  </footer>
+
+  <!-- Optional tiny script to keep the year current (safe if JS disabled) -->
+  <script>
+    (function(){ try {
+      var y = document.getElementById('y');
+      if (y) y.textContent = new Date().getFullYear();
+    } catch(e){} })();
+  </script>
+</body>
+</html>

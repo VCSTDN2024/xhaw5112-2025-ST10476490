@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Login</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link rel="stylesheet" href="signUp.css"
+</head>
+<body>
+
+<div class="navbar">
+  <a href="homepage.html"><i class="fa fa-home"></i>Home</a>
+  <a href="6month.html"><i class="fa fa-calendar"></i>6-Month Courses</a>
+  <a href="6week.html"><i class="fa fa-clock"></i>6-Week Courses</a>
+  <a href="Quote.html"><i class="fa fa-calculator"></i>Fees</a>
+  <a href="contact.html"><i class="fa fa-envelope"></i>Contact</a>
+  <a href="login.html"><i class="fa fa-user"></i>Login</a>
+  <a href="signUp.html"><i class="fa fa-user"></i>signUp</a>
+  <a href="userprofile.html"><i class="fa fa-user"></i>profile</a>
+</div>
+
+<div class="glass">
+    <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Register </title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  
+
+  <h1>Register</h1>
+
+  <form id="registerForm">
+    <label for="username">Username</label>
+    <input type="text" id="username" placeholder="Choose a username" required>
+
+    <label for="password">Password</label>
+    <input type="password" id="password" placeholder="Choose a password" required>
+
+    <label for="confirmPassword">Confirm Password</label>
+    <input type="password" id="confirmPassword" placeholder="Confirm password" required>
+
+    <button type="submit" class="save">Register</button>
+    <button type="reset" class="cancel">Cancel</button>
+  </form>
+
+  <div class="footer-info">
+    <p>Empowering the web ©</p>
+  </div>
+
+  <script>
+    const registerForm = document.getElementById("registerForm");
+
+    registerForm.addEventListener("submit", function(e) {
+      e.preventDefault();
+
+      const username = document.getElementById("username").value;
+      const password = document.getElementById("password").value;
+      const confirmPassword = document.getElementById("confirmPassword").value;
+
+      if(password !== confirmPassword) {
+        alert("Passwords do not match!");
+        return;
+      }
+
+      let users = JSON.parse(localStorage.getItem("users")) || [];
+
+      // Check if username already exists
+      if(users.some(user => user.username === username)) {
+        alert("Username already taken. Try another.");
+        return;
+      }
+
+      // Save new user
+      users.push({ username, password });
+      localStorage.setItem("users", JSON.stringify(users));
+
+      alert("Registration successful! You can now log in.");
+      window.location.href = "login.html";
+    });
+  </script>
+</body>
+
+<footer>
+  <div class="social-links">
+    <a href="https://www.facebook.com/share/1D8UUVruFP/?mibextid=wwXIfr" target="_blank"><i class="fab fa-facebook-f"></i></a>
+    <a href="https://www.instagram.com/empowering__the_nation?igsh=MXNiNTZnZjNwZWtwMg%3D%3D&utm_source=qr" target="_blank"><i class="fab fa-instagram"></i></a>
+    <a href="https://wa.me/0677136061" target="_blank"><i class="fab fa-whatsapp"></i></a>
+  </div>
+</footer>
+
+</html>
+

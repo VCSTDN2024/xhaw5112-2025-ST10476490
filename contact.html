@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contact Us</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+body { margin:0; font-family: Arial, sans-serif; background-image: url('Background.JPG');  color: white; background-size: cover; background-position: center; background-repeat: no-repeat; background-attachment: fixed; min-height: 100vh;}
+.navbar {display:flex;justify-content:space-around;padding:10px;backdrop-filter: blur(10px);background: rgba(255, 255, 255, 0.15);}
+.navbar a{color:white;text-decoration:none;text-align:center;font-size:14px;}
+.navbar a i{display:block;font-size:20px;margin-bottom:4px;}
+.glass {max-width:800px;margin:30px auto;padding:20px;border-radius:15px;background:rgba(255,255,255,0.1);backdrop-filter: blur(10px);border:1px solid rgba(255,255,255,0.3);}
+input,textarea{width:100%;padding:8px;margin-top:10px;border:none;border-radius:5px;}
+button{margin-top:10px;padding:10px;width:100%;border:none;border-radius:5px;background:rgba(255,255,255,0.3);color:white;font-weight:bold;}
+.social-links {
+  display: flex;
+  justify-content: center; /* centers icons horizontally */
+  gap: 20px;               /* space between icons */
+}
+
+.social-links a {
+  font-size: 24px;
+  color: white;            /* icon color */
+  text-decoration: none;
+  transition: color 0.3s;
+}
+
+.social-links a:hover {
+  color: #007bff;          /* hover effect */
+}
+
+</style>
+</head>
+<body>
+<div class="navbar">
+  <a href="homepage.html"><i class="fa fa-home"></i>Home</a>
+  <a href="6month.html"><i class="fa fa-calendar"></i>6-Month Courses</a>
+  <a href="6week.html"><i class="fa fa-clock"></i>6-Week Courses</a>
+  <a href="Quote.html"><i class="fa fa-calculator"></i>Fees</a>
+  <a href="contact.html"><i class="fa fa-envelope"></i>Contact</a>
+  <a href="login.html"><i class="fa fa-user"></i>Login</a>
+  <a href="signUp.html"><i class="fa fa-user"></i>signUp</a>
+  <a href="userprofile.html"><i class="fa fa-user"></i>profile</a>
+</div>
+
+<div class="glass">
+<h1>Contact Us</h1>
+<form id="contactForm">
+<input id="nameInput" type="text" placeholder="Your Name" required>
+<input id="emailInput" type="email" placeholder="Your Email" required>
+<textarea id="messageInput" rows="4" placeholder="Your Message"></textarea>
+<button type="button" onclick="sendEmail()">Send Email</button>
+<div></div>
+
+</form>
+<div class="glass"></div>
+
+
+<center>
+<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d229027.81864306756!2d27.673462373013376!3d-26.24349347954231!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x1e95a6b1e2746071%3A0x3a0838c21e9e6ddf!2sSoweto!5e0!3m2!1sen!2sza!4v1758024665366!5m2!1sen!2sza" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+<h1>Soweto Learning Venue</h1> 
+<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d14320.479505265905!2d28.027764762609916!3d-26.192778428962747!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x1e950c1974081ac5%3A0xd12a225dc667e805!2sBraamfontein%2C%20Johannesburg%2C%202017!5e0!3m2!1sen!2sza!4v1758024414724!5m2!1sen!2sza" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+<h1>Braamfontein Training Center</h1> 
+<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d114694.8605145646!2d27.975236918197545!3d-26.059248949224127!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x1e957398cbf40517%3A0xdf8bd21bf1eb74c!2sSandton!5e0!3m2!1sen!2sza!4v1758024519966!5m2!1sen!2sza" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+<h1>Sandton Skills Hub</h1>
+</center>
+<script>
+function formatCurrency(amount){
+  return 'R' + Number(amount).toFixed(2);
+}
+
+function calculateDiscountPercent(count){
+  if(count === 2) return 5;
+  if(count === 3) return 10;
+  if(count > 3) return 15;
+  return 0;
+}
+
+function buildCoursesSummary(savedCourses){
+  if(!savedCourses || savedCourses.length === 0){
+    return { lines: ['No courses saved.'], subtotal: 0, discountPercent: 0, total: 0 };
+  }
+  const lines = savedCourses.map((c, i) => `${i+1}. ${c.name} - ${formatCurrency(c.price)}`);
+  const subtotal = savedCourses.reduce((s, c) => s + Number(c.price || 0), 0);
+  const discountPercent = calculateDiscountPercent(savedCourses.length);
+  const discountAmount = subtotal * (discountPercent/100);
+  const total = subtotal - discountAmount;
+  lines.push(``);
+  lines.push(`Subtotal: ${formatCurrency(subtotal)}`);
+  lines.push(`Discount: ${discountPercent}% (${formatCurrency(discountAmount)})`);
+  lines.push(`Total: ${formatCurrency(total)}`);
+  return { lines, subtotal, discountPercent, total };
+}
+
+function sendEmail(){
+  const to = 'Jasveerjp1@gmail.com';
+  const name = (document.getElementById('nameInput').value || '').trim();
+  const email = (document.getElementById('emailInput').value || '').trim();
+  const message = (document.getElementById('messageInput').value || '').trim();
+
+  const currentUser = localStorage.getItem('currentUser');
+  let savedCourses = [];
+  if(currentUser){
+    const profile = JSON.parse(localStorage.getItem(`profile:${currentUser}`) || '{"savedCourses":[]}');
+    savedCourses = profile.savedCourses || [];
+  }
+  const summary = buildCoursesSummary(savedCourses);
+
+  const subject = encodeURIComponent('Course enquiry and selection');
+  const parts = [];
+  parts.push(name ? `Name: ${name}` : 'Name:');
+  parts.push(email ? `Email: ${email}` : 'Email:');
+  if(currentUser) parts.push(`Username: ${currentUser}`);
+  parts.push('');
+  parts.push('Selected courses:');
+  parts.push(...summary.lines);
+  if(message){
+    parts.push('');
+    parts.push('Message:');
+    parts.push(message);
+  }
+  const body = encodeURIComponent(parts.join('\n'));
+
+  window.location.href = `mailto:${to}?subject=${subject}&body=${body}`;
+}
+</script>
+<glass>
+<footer>
+  <div class="social-links">
+    <a href="https://www.facebook.com/share/1D8UUVruFP/?mibextid=wwXIfr" target="_blank"><i class="fab fa-facebook-f"></i></a>
+    <a href="https://www.instagram.com/empowering__the_nation?igsh=MXNiNTZnZjNwZWtwMg%3D%3D&utm_source=qr" target="_blank"><i class="fab fa-instagram"></i></a>
+    <a href="https://wa.me/0677136061" target="_blank"><i class="fab fa-whatsapp"></i></a>
+  </div>
+  </glass>
+</footer>
+</body>
+</html>

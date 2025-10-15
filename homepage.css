@@ -1,0 +1,86 @@
+body { margin:0; font-family: Arial, sans-serif; background-image: url('Background.JPG');  color: white; background-size: cover; background-position: center; background-repeat: no-repeat; background-attachment: fixed; min-height: 100vh;}
+.navbar {display:flex;justify-content:space-around;padding:10px;backdrop-filter: blur(10px);background: rgba(255, 255, 255, 0.15);}
+.navbar a{color:white;text-decoration:none;text-align:center;font-size:14px;}
+.navbar a i{display:block;font-size:20px;margin-bottom:4px;}
+.glass {max-width:800px;margin:30px auto;padding:20px;border-radius:15px;background:rgba(255,255,255,0.1);backdrop-filter: blur(10px);border:1px solid rgba(255,255,255,0.3);}
+input[type=number]{width:100%;padding:8px;border:none;border-radius:5px;margin-top:10px;}
+button{margin-top:10px;padding:10px;width:100%;border:none;border-radius:5px;background:rgba(255,255,255,0.3);color:white;font-weight:bold;}
+ 
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background-image: url('Background.JPG'); 
+  color: white;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  min-height: 100vh;
+}
+.navbar {
+  display: flex;
+  justify-content: space-around;
+  padding: 10px;
+  backdrop-filter: blur(10px);
+  background: rgba(255, 255, 255, 0.15);
+}
+.navbar a {
+  color: white;
+  text-decoration: none;
+  text-align: center;
+  font-size: 14px;
+}
+.navbar a i {
+  display: block;
+  font-size: 20px;
+  margin-bottom: 4px;
+}
+.glass {
+  max-width: 800px;
+  margin: 30px auto;
+  padding: 20px;
+  border-radius: 15px;
+  background: rgba(255,255,255,0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255,255,255,0.3);
+}
+h1 {
+  text-align: center;
+}
+.button-link {
+  display: inline-block;
+  padding: 10px 15px;
+  margin: 5px;
+  border-radius: 8px;
+  background: rgba(255,255,255,0.2);
+  color: white;
+  text-decoration: none;
+}
+.button-link:hover {
+  background: rgba(255,255,255,0.3);
+}
+footer {
+  background: #111;        /* footer background color */
+  padding: 20px 0;
+  position: fixed;         /* makes it stick at bottom */
+  bottom: 0;
+  left: 0;
+  width: 100%;
+}
+
+.social-links {
+  display: flex;
+  justify-content: center; /* centers icons horizontally */
+  gap: 20px;               /* space between icons */
+}
+
+.social-links a {
+  font-size: 24px;
+  color: white;            /* icon color */
+  text-decoration: none;
+  transition: color 0.3s;
+}
+
+.social-links a:hover {
+  color: #007bff;          /* hover effect */
+}

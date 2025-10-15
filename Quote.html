@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fee Calculator</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+body { margin:0; font-family: Arial, sans-serif; background-image: url('Background.JPG');  color: white; background-size: cover; background-position: center; background-repeat: no-repeat; background-attachment: fixed; min-height: 100vh;}
+.navbar {display:flex;justify-content:space-around;padding:10px;backdrop-filter: blur(10px);background: rgba(255, 255, 255, 0.15);}
+.navbar a{color:white;text-decoration:none;text-align:center;font-size:14px;}
+.navbar a i{display:block;font-size:20px;margin-bottom:4px;}
+.glass {max-width:800px;margin:30px auto;padding:20px;border-radius:15px;background:rgba(255,255,255,0.1);backdrop-filter: blur(10px);border:1px solid rgba(255,255,255,0.3);}
+input[type=number]{width:100%;padding:8px;border:none;border-radius:5px;margin-top:10px;}
+button{margin-top:10px;padding:10px;width:100%;border:none;border-radius:5px;background:rgba(255,255,255,0.3);color:white;font-weight:bold;}
+.social-links {
+  display: flex;
+  justify-content: center; /* centers icons horizontally */
+  gap: 20px;               /* space between icons */
+}
+
+.social-links a {
+  font-size: 24px;
+  color: white;            /* icon color */
+  text-decoration: none;
+  transition: color 0.3s;
+}
+
+.social-links a:hover {
+  color: #007bff;          /* hover effect */
+}
+</style>
+</head>
+<body>
+
+<div class="navbar">
+  <a href="homepage.html"><i class="fa fa-home"></i>Home</a>
+  <a href="6month.html"><i class="fa fa-calendar"></i>6-Month Courses</a>
+  <a href="6week.html"><i class="fa fa-clock"></i>6-Week Courses</a>
+  <a href="Quote.html"><i class="fa fa-calculator"></i>Fees</a>
+  <a href="contact.html"><i class="fa fa-envelope"></i>Contact</a>
+  <a href="login.html"><i class="fa fa-user"></i>Login</a>
+  <a href="signUp.html"><i class="fa fa-user"></i>signUp</a>
+  <a href="userprofile.html"><i class="fa fa-user"></i>profile</a>
+</div>
+<div class="glass">
+  <h2>Select Courses</h2>
+  
+  <form id="courseForm">
+    <label><input type="checkbox" name="course" value="750"> Child minding (R750)</label><br>
+    <label><input type="checkbox" name="course" value="750"> Cooking (R750)</label><br>
+    <label><input type="checkbox" name="course" value="750"> Garden maintenance (R750)</label><br>
+    <label><input type="checkbox" name="course" value="1500"> Sewing  (R1500)</label><br>
+    <label><input type="checkbox" name="course" value="1500"> First aid  (R1500)</label><br>
+    <label><input type="checkbox" name="course" value="1500"> Landscaping (R1500)</label><br>
+    <label><input type="checkbox" name="course" value="1500"> Life Skills (R1500)</label><br>
+    <br>
+    <button type="button" onclick="calculateDiscount()">Calculate Total</button>
+    <button type="button" onclick="saveSelectedCourses()">Save Selected Courses</button>
+  </form>
+
+  <h3 id="result"></h3>
+
+  <script>
+    function calculateDiscount() {
+      const checkboxes = document.querySelectorAll('input[name="course"]:checked');
+      const numCourses = checkboxes.length;
+      let total = 0;
+
+      checkboxes.forEach(cb => {
+        total += parseFloat(cb.value);
+      });
+
+      let discount = 0;
+      if (numCourses === 2) {
+        discount = 0.05;
+      } else if (numCourses === 3) {
+        discount = 0.10;
+      } else if (numCourses > 3) {
+        discount = 0.15;
+      }
+
+      const discountedTotal = total * (1 - discount);
+      const savings = total - discountedTotal;
+      const percent = Math.round(discount * 100);
+
+      document.getElementById('result').textContent =
+        `You selected ${numCourses} course(s). Subtotal: R${total.toFixed(2)} | Discount: ${percent}% (You save R${savings.toFixed(2)}) | Total: R${discountedTotal.toFixed(2)}`;
+    }
+    function saveSelectedCourses() {
+      const username = localStorage.getItem('currentUser');
+      if(!username) {
+        alert('Please login to save courses.');
+        window.location.href = 'login.html';
+        return;
+      }
+      const checkboxes = document.querySelectorAll('input[name="course"]');
+      const selected = [];
+      checkboxes.forEach(input => {
+        if(input.checked) {
+          const label = input.parentElement;
+          const text = label.textContent.trim();
+          const name = text.replace(/\(R.*\)/, '').trim();
+          selected.push({ name, price: parseFloat(input.value) });
+        }
+      });
+
+      if(selected.length === 0) {
+        alert('Select at least one course to save.');
+        return;
+      }
+
+      const profileKey = `profile:${username}`;
+      const profile = JSON.parse(localStorage.getItem(profileKey) || '{"username":"","savedCourses":[]}');
+      const existingNames = new Set((profile.savedCourses || []).map(c => c.name));
+      selected.forEach(c => {
+        if(!existingNames.has(c.name)) {
+          profile.savedCourses.push(c);
+        }
+      });
+      localStorage.setItem(profileKey, JSON.stringify(profile));
+      alert('Courses saved. Redirecting to your page...');
+      window.location.href = 'user.html';
+    }
+  </script>
+<footer>
+  <div class="social-links">
+    <a href="https://www.facebook.com/share/1D8UUVruFP/?mibextid=wwXIfr" target="_blank"><i class="fab fa-facebook-f"></i></a>
+    <a href="https://www.instagram.com/empowering__the_nation?igsh=MXNiNTZnZjNwZWtwMg%3D%3D&utm_source=qr" target="_blank"><i class="fab fa-instagram"></i></a>
+    <a href="https://wa.me/0677136061" target="_blank"><i class="fab fa-whatsapp"></i></a>
+  </div>
+</footer>
+</body>
+</html>

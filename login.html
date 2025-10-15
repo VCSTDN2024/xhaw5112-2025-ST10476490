@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Login</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+body { margin:0; font-family: Arial, sans-serif; background-image: url('Background.JPG');  color: white; background-size: cover; background-position: center; background-repeat: no-repeat; background-attachment: fixed; min-height: 100vh;}
+.navbar {display:flex;justify-content:space-around;padding:10px;backdrop-filter: blur(10px);background: rgba(255, 255, 255, 0.15);}
+.navbar a{color:white;text-decoration:none;text-align:center;font-size:14px;}
+.navbar a i{display:block;font-size:20px;margin-bottom:4px;}
+.glass {max-width:400px;margin:100px auto;padding:20px;border-radius:15px;background:rgba(255,255,255,0.1);backdrop-filter: blur(10px);border:1px solid rgba(255,255,255,0.3);}
+input{width:100%;padding:8px;margin-top:10px;border:none;border-radius:5px;}
+button{margin-top:10px;padding:10px;width:100%;border:none;border-radius:5px;background:rgba(255,255,255,0.3);color:white;font-weight:bold;}
+.social-links {
+  display: flex;
+  justify-content: center; /* centers icons horizontally */
+  gap: 20px;               /* space between icons */
+}
+
+.social-links a {
+  font-size: 24px;
+  color: white;            /* icon color */
+  text-decoration: none;
+  transition: color 0.3s;
+}
+
+.social-links a:hover {
+  color: #007bff;          /* hover effect */
+}
+
+</style>
+</head>
+<body>
+<div class="navbar">
+  <a href="homepage.html"><i class="fa fa-home"></i>Home</a>
+  <a href="6month.html"><i class="fa fa-calendar"></i>6-Month Courses</a>
+  <a href="6week.html"><i class="fa fa-clock"></i>6-Week Courses</a>
+  <a href="Quote.html"><i class="fa fa-calculator"></i>Fees</a>
+  <a href="contact.html"><i class="fa fa-envelope"></i>Contact</a>
+  <a href="login.html"><i class="fa fa-user"></i>Login</a>
+  <a href="signUp.html"><i class="fa fa-user"></i>signUp</a>
+  <a href="userprofile.html"><i class="fa fa-user"></i>profile</a>
+</div>
+
+<div class="glass">
+
+  <h1>Login</h1>
+
+  <form id="loginForm">
+    <label for="username">Username</label>
+    <input type="text" id="username" placeholder="Enter username" required>
+
+    <label for="password">Password</label>
+    <input type="password" id="password" placeholder="Enter password" required>
+
+    <button type="submit" class="save">Login</button>
+    <button type="reset" class="cancel">Cancel</button>
+  </form>
+  
+
+  <div class="footer-info">
+    <p>Empowering the web ©</p>
+  </div>
+  <footer>
+  <div class="social-links">
+    <a href="https://www.facebook.com/share/1D8UUVruFP/?mibextid=wwXIfr" target="_blank"><i class="fab fa-facebook-f"></i></a>
+    <a href="https://www.instagram.com/empowering__the_nation?igsh=MXNiNTZnZjNwZWtwMg%3D%3D&utm_source=qr" target="_blank"><i class="fab fa-instagram"></i></a>
+    <a href="https://wa.me/0677136061" target="_blank"><i class="fab fa-whatsapp"></i></a>
+  </div>
+</footer>
+
+  <script>
+    const form = document.getElementById("loginForm");
+    form.addEventListener("submit", function(e) {
+      e.preventDefault();
+
+      const username = document.getElementById("username").value;
+      const password = document.getElementById("password").value;
+
+      let users = JSON.parse(localStorage.getItem("users")) || [];
+
+      const user = users.find(u => u.username === username && u.password === password);
+
+      if(user) {
+        // remember current user and ensure profile exists
+        localStorage.setItem("currentUser", username);
+        const profileKey = `profile:${username}`;
+        const existingProfile = JSON.parse(localStorage.getItem(profileKey) || 'null');
+        if(!existingProfile) {
+          localStorage.setItem(profileKey, JSON.stringify({ username, savedCourses: [] }));
+        }
+        alert("Login successful!");
+        window.location.href = "userprofile.html";
+      } else {
+        alert("Invalid username or password. Try again.");
+      }
+    });
+  </script>
+</div>
+
+
+
+</body>
+</html>
